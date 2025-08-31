@@ -1,0 +1,72 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user"></i> Información Personal</h5>
+            </div>
+            <div class="card-body text-center">
+                {% if user.perfil.avatar %}
+                    <img src="{{ user.perfil.avatar.url }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                        <i class="fas fa-user fa-4x text-light"></i>
+                    </div>
+                {% endif %}
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                {% if user.perfil.biografia %}
+                    <p>{{ user.perfil.biografia }}</p>
+                {% else %}
+                    <p class="text-muted">No hay biografía disponible</p>
+                {% endif %}
+                <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Editar Perfil
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-newspaper"></i> Mis Posts</h5>
+            </div>
+            <div class="card-body">
+                {% if user.autor.post_set.all %}
+                    <div class="row">
+                        {% for post in user.autor.post_set.all %}
+                            <div class="col-md-6 mb-3">
+                                <div class="card">
+                                    {% if post.imagen %}
+                                        <img src="{{ post.imagen.url }}" class="card-img-top" style="height: 150px; object-fit: cover;" alt="{{ post.titulo }}">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ post.titulo|truncatechars:30 }}</h6>
+                                        <p class="card-text">{{ post.resumen|truncatechars:50 }}</p>
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'blog:post_detail' post.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
+                                            <a href="{% url 'blog:post_update' post.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center">
+                        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                        <p>Aún no has creado ningún post.</p>
+                        <a href="{% url 'blog:post_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Crear mi primer post
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Acerca de mí{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                    <i class="fas fa-user fa-4x text-light"></i>
+                </div>
+                <h4>Tu Nombre</h4>
+                <p class="text-muted">Desarrollador Full Stack</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="#" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-info btn-sm">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-success btn-sm">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-circle"></i> Acerca de mí</h3>
+            </div>
+            <div class="card-body">
+                <h5>¡Hola! Bienvenido a mi blog</h5>
+                <p>
+                    Soy un apasionado desarrollador web con experiencia en Django y Python. 
+                    Me encanta crear aplicaciones web funcionales y elegantes que resuelvan problemas reales.
+                </p>
+                
+                <h6><i class="fas fa-code"></i> Tecnologías que manejo:</h6>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fab fa-python text-primary"></i> Python</li>
+                            <li><i class="fas fa-leaf text-success"></i> Django</li>
+                            <li><i class="fab fa-js-square text-warning"></i> JavaScript</li>
+                            <li><i class="fab fa-html5 text-danger"></i> HTML5</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fab fa-css3-alt text-info"></i> CSS3</li>
+                            <li><i class="fab fa-bootstrap text-purple"></i> Bootstrap</li>
+                            <li><i class="fas fa-database text-secondary"></i> PostgreSQL</li>
+                            <li><i class="fab fa-git-alt text-danger"></i> Git</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h6><i class="fas fa-graduation-cap"></i> Formación:</h6>
+                <p>
+                    Estudiante de programación en constante aprendizaje, enfocado en el desarrollo web 
+                    con Python y Django. Me gusta mantenerme actualizado con las últimas tecnologías 
+                    y mejores prácticas del desarrollo web.
+                </p>
+                
+                <h6><i class="fas fa-heart"></i> Lo que me apasiona:</h6>
+                <ul>
+                    <li>Crear soluciones tecnológicas innovadoras</li>
+                    <li>Aprender nuevas tecnologías y frameworks</li>
+                    <li>Escribir código limpio y eficiente</li>
+                    <li>Colaborar en proyectos de código abierto</li>
+                    <li>Compartir conocimiento a través de este blog</li>
+                </ul>
+                
+                <div class="mt-4 p-3 bg-light rounded">
+                    <h6><i class="fas fa-quote-left"></i> Mi filosofía:</h6>
+                    <p class="fst-italic mb-0">
+                        "El mejor momento para plantar un árbol fue hace 20 años. 
+                        El segundo mejor momento es ahora." - Proverbio chino
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5><i class="fas fa-envelope"></i> Contacto</h5>
+            </div>
+            <div class="card-body">
+                <p>¿Te interesa colaborar o tienes alguna pregunta? ¡No dudes en contactarme!</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-envelope"></i> <strong>Email:</strong> tu.email@gmail.com</p>
+                        <p><i class="fab fa-github"></i> <strong>GitHub:</strong> github.com/tuusuario</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fab fa-linkedin"></i> <strong>LinkedIn:</strong> linkedin.com/in/tuusuario</p>
+                        <p><i class="fas fa-map-marker-alt"></i> <strong>Ubicación:</strong> Argentina</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

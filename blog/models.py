@@ -26,8 +26,11 @@ class Autor(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 class Post(models.Model):
-    titulo = models.CharField(max_length=200)
+    titulo = models.CharField(max_length=200)  # CharField 1
+    resumen = models.CharField(max_length=300, default="", blank=True)  # 👈 con default
     contenido = models.TextField()
+    precio = models.IntegerField(default=0)  # IntegerField requerido
+    imagen = models.ImageField(upload_to='posts/', blank=True, null=True)  # ImageField requerido
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     fecha_creacion = models.DateTimeField(default=timezone.now)
@@ -40,5 +43,3 @@ class Post(models.Model):
     
     def __str__(self):
         return self.titulo
-
-
