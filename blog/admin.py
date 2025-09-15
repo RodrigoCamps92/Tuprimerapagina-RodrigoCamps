@@ -13,6 +13,6 @@ class AutorAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'autor', 'categoria', 'activo', 'fecha_creacion')
+    list_display = ('titulo', 'autor', 'categoria', 'precio', 'activo', 'fecha_creacion')
     list_filter = ('categoria', 'activo', 'fecha_creacion')
-    search_fields = ('titulo', 'contenido')
+    search_fields = ('titulo', 'resumen', 'contenido')

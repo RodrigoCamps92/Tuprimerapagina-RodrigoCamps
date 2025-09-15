@@ -152,3 +152,18 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+
+# Archivos estáticos y media
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # si tenés carpeta 'static' en el root
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Login/Logout
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = 'blog:post_list'
+LOGOUT_REDIRECT_URL = 'blog:post_list'

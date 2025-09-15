@@ -1,92 +1,82 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from .models import Post, Categoria, Autor
-from .forms import PostForm, CategoriaForm, AutorForm, BuscarForm
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
-def index(request):
-    posts = Post.objects.filter(activo=True)
-    form = BuscarForm()
-    context = {
-        'posts': posts,
-        'form': form,
-        'titulo': 'Mi Blog Personal'
-    }
-    return render(request, 'blog/index.html', context)
+from .models import Post
+from .forms import PostForm
 
-def crear_post(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, '¡Post creado exitosamente!')
-            return redirect('blog:index')
-    else:
-        form = PostForm()
-    
-    context = {
-        'form': form,
-        'titulo': 'Crear Nuevo Post',
-        'accion': 'Crear'
-    }
-    return render(request, 'blog/crear_post.html', context)
+class AboutView(TemplateView):
+    template_name = 'blog/about.html'
 
-def crear_categoria(request):
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, '¡Categoría creada exitosamente!')
-            return redirect('blog:index')
-    else:
-        form = CategoriaForm()
-    
-    context = {
-        'form': form,
-        'titulo': 'Crear Nueva Categoría',
-        'accion': 'Crear'
-    }
-    return render(request, 'blog/crear_categoria.html', context)
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 6
 
-def crear_autor(request):
-    if request.method == 'POST':
-        form = AutorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, '¡Autor creado exitosamente!')
-            return redirect('blog:index')
-    else:
-        form = AutorForm()
-    
-    context = {
-        'form': form,
-        'titulo': 'Crear Nuevo Autor',
-        'accion': 'Crear'
-    }
-    return render(request, 'blog/crear_autor.html', context)
-
-def buscar_posts(request):
-    posts = []
-    query = ""
-    
-    if request.method == 'GET' and 'busqueda' in request.GET:
-        form = BuscarForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['busqueda']
-            posts = Post.objects.filter(
-                Q(titulo__icontains=query) |
-                Q(contenido__icontains=query) |
-                Q(autor__nombre__icontains=query) |
-                Q(categoria__nombre__icontains=query),
-                activo=True
+    def get_queryset(self):
+        qs = Post.objects.filter(activo=True).select_related('autor', 'categoria')
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(
+                Q(titulo__icontains=q) |
+                Q(resumen__icontains=q) |
+                Q(contenido__icontains=q) |
+                Q(categoria__nombre__icontains=q) |
+                Q(autor__nombre__icontains=q) |
+                Q(autor__apellido__icontains=q)
             )
-    else:
-        form = BuscarForm()
-    
-    context = {
-        'form': form,
-        'posts': posts,
-        'query': query,
-        'titulo': 'Buscar Posts'
-    }
-    return render(request, 'blog/buscar.html', context)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['titulo'] = 'Mi Blog Django'
+        ctx['q'] = self.request.GET.get('q', '')
+        return ctx
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('blog:post_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, '¡Post creado correctamente!')
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('blog:post_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, '¡Post actualizado!')
+        return super().form_valid(form)
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('blog:post_list')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Post eliminado.')
+        return super().delete(request, *args, **kwargs)
+
+class MisPostsListView(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        # Criterio simple: empareja email del Autor con el email del usuario
+        return Post.objects.filter(activo=True, autor__email=self.request.user.email)

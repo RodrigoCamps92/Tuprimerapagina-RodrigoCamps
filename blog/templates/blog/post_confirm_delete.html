@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% block title %}Borrar Post{% endblock %}
+{% block content %}
+<div class="alert alert-warning">
+  ¿Confirmás borrar <strong>{{ object.titulo }}</strong>?
+</div>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">Sí, borrar</button>
+  <a class="btn btn-secondary" href="{% url 'blog:post_detail' object.pk %}">Cancelar</a>
+</form>
+{% endblock %}
